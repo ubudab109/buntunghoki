@@ -10,7 +10,7 @@ class BankPayment extends Model
     use HasFactory;
 
     protected $table = 'bank_payments';
-    protected $fillable = ['payment_type_id', 'name', 'status'];
+    protected $fillable = ['payment_type_id', 'name', 'logo', 'status'];
 
     public function paymentType()
     {

@@ -58,6 +58,7 @@ class BankController extends Controller
             'payment_id'    => $bank->payment_type_id,
             'payment_name'  => $bank->paymentType->name,
             'status'        => $bank->status,
+            'logo'          => $bank->logo,
             'can_edit'      => auth()->user()->can('bank-payment-edit'),
         ];
         return response()->json($data);
@@ -67,7 +68,8 @@ class BankController extends Controller
     {
         $request->validate([
             'name'            => 'required',
-            'payment_type_id' => 'required'
+            'payment_type_id' => 'required',
+            'logo'            => 'required',
         ]);
 
         DB::beginTransaction();
@@ -92,13 +94,18 @@ class BankController extends Controller
     {
         $request->validate([
             'name'            => 'required',
-            'payment_type_id' => 'required'
+            'payment_type_id' => 'required',
+            'logo'            => '',
         ]);
 
         DB::beginTransaction();
         try {
+            $input = $request->all();
+            if ($request->input('logo') != null) {
+                $input['logo'] = $request->input('logo');
+            }
             $bankPayment = BankPayment::find($id);
-            $bankPayment->update($request->all());
+            $bankPayment->update($input);
             DB::commit();
             return response()->json([
                 'status'  => true,
@@ -118,5 +125,24 @@ class BankController extends Controller
     {
         BankPayment::find($id)->delete();
         return response()->json(['status' => true]);
+    }
+
+    public function logo()
+    {
+        $data = [
+            asset('logo/bca.png'),
+            asset('logo/bni.png'),
+            asset('logo/bri.png'),
+            asset('logo/cimb.png'),
+            asset('logo/dana.png'),
+            asset('logo/dbs.png'),
+            asset('logo/gopay.png'),
+            asset('logo/mandiri.png'),
+            asset('logo/ovo.png'),
+            asset('logo/telkomsel.png'),
+            asset('logo/uob.png'),
+            asset('logo/xl.png'),
+        ];
+        return response()->json(['data' => $data]);
     }
 }

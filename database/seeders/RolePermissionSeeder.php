@@ -248,6 +248,27 @@ class RolePermissionSeeder extends Seeder
                 'name'       => 'admin-bank-delete',
                 'display'    => 'Delete',
             ],
+            [
+                'id'         => 34,
+                'parent_id'  => null,
+                'guard_name' => 'web',
+                'name'       => 'transaction',
+                'display'    => 'Transaction',
+            ],
+            [
+                'id'         => 35,
+                'parent_id'  => 34,
+                'guard_name' => 'web',
+                'name'       => 'transaction-list',
+                'display'    => 'Transaction',
+            ],
+            [
+                'id'         => 36,
+                'parent_id'  => 34,
+                'guard_name' => 'web',
+                'name'       => 'transaction-update',
+                'display'    => 'Update',
+            ],
         ];
 
         foreach ($data as $perm) {

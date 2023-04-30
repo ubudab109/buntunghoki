@@ -9,6 +9,7 @@ use Spatie\Permission\Models\Role;
 use Yajra\DataTables\DataTables;
 use Alert;
 use App\Models\PaymentType;
+use Illuminate\Support\Facades\Hash;
 
 class AdminController extends Controller
 {
@@ -90,7 +91,9 @@ class AdminController extends Controller
 
         DB::beginTransaction();
         try {
-            $user = User::create($request->except('role'));
+            $input = $request->except('role');
+            $input['password'] = Hash::make($request->password);
+            $user = User::create($input);
             $user->assignRole($request->role);
             DB::commit();
             Alert::success('Success', 'Admin created successfully');

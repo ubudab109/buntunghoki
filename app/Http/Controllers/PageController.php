@@ -18,6 +18,7 @@ class PageController extends Controller
         $this->middleware('can:payment-type-list', ['only' => 'paymentType']);
         $this->middleware('can:bank-payment-list', ['only' => 'bank']);
         $this->middleware('can:company-setting-list', ['only' => 'setting']);
+        $this->middleware('can:transaction-list', ['only' => 'transaction']);
     }
 
     // PAGE DASHBOARD
@@ -47,17 +48,45 @@ class PageController extends Controller
     // BANK LIST
     public function bank()
     {
+        $logos = [
+            asset('logo/bca.png'),
+            asset('logo/bni.png'),
+            asset('logo/bri.png'),
+            asset('logo/cimb.png'),
+            asset('logo/dana.png'),
+            asset('logo/dbs.png'),
+            asset('logo/gopay.png'),
+            asset('logo/mandiri.png'),
+            asset('logo/ovo.png'),
+            asset('logo/telkomsel.png'),
+            asset('logo/uob.png'),
+            asset('logo/xl.png'),
+        ];
         $paymentTypes = PaymentType::where('status', 1)->get();
-        return view('pages.bank-list', compact('paymentTypes'));
+        return view('pages.bank-list', compact('paymentTypes', 'logos'));
     }
 
     // ADMIN BANK
     public function adminBank(Request $request)
     {
+        $logos = [
+            asset('logo/bca.png'),
+            asset('logo/bni.png'),
+            asset('logo/bri.png'),
+            asset('logo/cimb.png'),
+            asset('logo/dana.png'),
+            asset('logo/dbs.png'),
+            asset('logo/gopay.png'),
+            asset('logo/mandiri.png'),
+            asset('logo/ovo.png'),
+            asset('logo/telkomsel.png'),
+            asset('logo/uob.png'),
+            asset('logo/xl.png'),
+        ];
         $paymentTypes = PaymentType::select('id','name')->get();
         $admins = User::select('id','fullname')->get();
         
-        return view('pages.admin-bank-list', compact('paymentTypes', 'admins'));
+        return view('pages.admin-bank-list', compact('paymentTypes', 'admins', 'logos'));
     }
 
     // COMPANY SETTING
@@ -67,5 +96,11 @@ class PageController extends Controller
         $companyLogo = CompanySetting::where('slug', 'company_logo')->first();
 
         return view('pages.company-setting', compact('companyName', 'companyLogo'));
+    }
+
+    // Transaction LIST
+    public function transaction()
+    {
+        return view('pages.transaction-list');
     }
 }

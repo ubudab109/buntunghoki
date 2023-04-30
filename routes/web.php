@@ -8,6 +8,7 @@ use App\Http\Controllers\CompanySettingController;
 use App\Http\Controllers\PageController;
 use App\Http\Controllers\PaymentTypeController;
 use App\Http\Controllers\RolePermissionController;
+use App\Http\Controllers\TransactionController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -39,6 +40,7 @@ Route::group(['middleware' => 'auth'], function () {
         Route::get('payments', [PaymentTypeController::class, 'data'])->name('payment.data');
         Route::get('banks', [BankController::class, 'data'])->name('bank.data');
         Route::get('admin-banks', [AdminBankController::class, 'data'])->name('admin-bank.data');
+        Route::get('transaction-data', [TransactionController::class, 'data'])->name('transaction.data');
     });
 
     // ROLE
@@ -72,6 +74,7 @@ Route::group(['middleware' => 'auth'], function () {
         Route::post('update/{id}', [BankController::class, 'update'])->name('bank.update');
         Route::get('detail/{id}', [BankController::class, 'detail'])->name('bank.detail');
         Route::delete('delete/{id}', [BankController::class, 'delete'])->name('bank.delete');    
+        Route::get('logo', [BankController::class, 'logo'])->name('bank.logo');
     });
 
     // ADMIN BANK
@@ -83,6 +86,11 @@ Route::group(['middleware' => 'auth'], function () {
         Route::post('update/{id}', [AdminBankController::class, 'update'])->name('admin-bank.update');
     });
 
+    // TRANSACTION
+    Route::group(['prefix' => 'transaction'], function () {
+        Route::post('update/{id}', [TransactionController::class, 'update'])->name('transaction.update');
+    });
+
     Route::post('company-setting', [CompanySettingController::class, 'update'])->name('company-setting.update');
 
     Route::get('/', [PageController::class, 'dashboard'])->name('dashboard');
@@ -92,4 +100,5 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('bank', [PageController::class, 'bank'])->name('bank.index');
     Route::get('admin-bank', [PageController::class, 'adminBank'])->name('admin-bank.index');
     Route::get('company-setting', [PageController::class, 'setting'])->name('company-setting.list');
+    Route::get('transaction', [PageController::class, 'transaction'])->name('transaction.index');
 });

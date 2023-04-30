@@ -42,7 +42,7 @@
           <div class="card">
             <div class="card-body">
               <div class="btn-group" role="group" aria-label="Basic example">
-                @can('role-management-update')
+                @can('role-management-edit')
                 <button type="submit" class="btn btn-primary mr-2">Save</button>
                 @endcan
                 <button type="button" class="btn btn-danger">

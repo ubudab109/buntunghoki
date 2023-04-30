@@ -70,6 +70,16 @@
             </a>
         </li>
         @endcan
+        @can('transaction-list')
+        <li class="nav-item">
+            <a href="{{route('transaction.index')}}" class="nav-link {{setActive('transaction.*')}}">
+                <i class="nav-icon fas fa-money-bill"></i>
+                <p>
+                    Member Transaction
+                </p>
+            </a>
+        </li>
+        @endcan
         @can('company-setting-list')
         <li class="nav-item">
             <a href="{{route('company-setting.list')}}" class="nav-link {{setActive('company-setting.*')}}">

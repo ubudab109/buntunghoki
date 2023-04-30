@@ -34,6 +34,18 @@ Bank List
             </div>
 
             <div class="form-group">
+              <label for="createPaymentId">Logo</label>
+              <br>
+              @foreach ($logos as $key => $logo)
+              <div class="form-check form-check-inline">
+                <input onchange="createBankLogo()" class="form-check-input" type="radio" name="create_logo"
+                  id="logo-{{$key}}" value="{{$logo}}">
+                <label class="form-check-label" for="logo-{{$key}}"><img width="50" src="{{$logo}}" alt=""></label>
+              </div>
+              @endforeach
+            </div>
+
+            <div class="form-group">
               <label for="createStatus">Status</label>
               <select name="status" id="createStatus" required class="form-control">
                 <option value="">Select Status...</option>
@@ -61,8 +73,14 @@ Bank List
             <span aria-hidden="true">&times;</span>
           </button>
         </div>
+
         <form id="formUpdate">
           <div class="modal-body">
+            <div class="form-group">
+
+              <label for="">Current Logo</label>
+              <img width="50" id="show_logo" src="" alt="">
+            </div>
             <input type="hidden" name="id" id="idUpdate">
             <div class="form-group">
               <label for="updatePaymentId">Payment Type</label>
@@ -79,6 +97,22 @@ Bank List
               <input placeholder="Ex: BCA, OVO, DANA" type="text" name="updateBankName" id="updateBankName"
                 class="form-control">
             </div>
+
+            <div class="form-group">
+              <label for="update_logo">Logo</label>
+              <br>
+
+              @foreach ($logos as $key => $logo)
+              <div class="form-check form-check-inline">
+                <input checked="false" onchange="updateBankLogo()" class="form-check-input" type="radio"
+                  name="update_logo" id="updatelogo-{{$key}}" value="{{$logo}}">
+                <label class="form-check-label" for="updatelogo-{{$key}}"><img width="50" src="{{$logo}}"
+                    alt=""></label>
+              </div>
+              @endforeach
+            </div>
+
+
 
             <div class="form-group">
               <label for="updateStatus">Status</label>
@@ -162,6 +196,16 @@ Bank List
     table.draw();
   });
 
+  function createBankLogo() {
+    let value = $('input[name="create_logo"]:checked').val();
+    return value;
+  }
+
+  function updateBankLogo() {
+    let value = $('input[name="update_logo"]:checked').val();
+    return value;
+  }
+
   // CREATE BANK
   $("#formCreate").on('submit', e => {
     e.preventDefault();
@@ -169,6 +213,7 @@ Bank List
     let paymentId = $("#createPaymentId").val();
     let bankName = $("#createBankName").val();
     let status = $("#createStatus").val();
+    let logo = createBankLogo();
     $.ajax({
       method: 'POST',
       url: url,
@@ -178,6 +223,7 @@ Bank List
       data: {
         name: bankName,
         payment_type_id: paymentId,
+        logo: logo,
         status: status
       },
     }).then(res => {
@@ -196,6 +242,7 @@ Bank List
           icon: 'error',
         });
       }
+      $('input[name=create_logo]').prop('checked',false);
     })
   });
 
@@ -208,6 +255,7 @@ Bank List
       var name = $("#updateBankName").val();
       var status = $("#updateStatus").val();
       var payment = $("#updatePaymentId").val();
+      var logo = updateBankLogo() !== '' ? updateBankLogo() : null;
       $.ajax({
         method: 'POST',
         url: url,
@@ -217,6 +265,7 @@ Bank List
         data: {
           name: name,
           status: status,
+          logo: logo,
           payment_type_id: payment,
         },
       })
@@ -230,6 +279,7 @@ Bank List
             $("#updateModal").modal('hide');
             table.ajax.reload();
           });
+          $('input[name=update_logo]').prop('checked',false);
         } else {
           Swal.fire({
             title: 'Failed',
@@ -285,6 +335,8 @@ Bank List
       $("#updateBankName").val(res.name);
       document.getElementById('updatePaymentId').value = res.payment_id;
       document.getElementById('updateStatus').value = res.status;
+      $("#show_logo").attr('src', res.logo);
+      console.log(res.logo);
       $("#idUpdate").val(res.id);
       if (!res.can_edit) {
         document.getElementById('submitUpdate').style.display = 'none';
