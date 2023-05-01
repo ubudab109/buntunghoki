@@ -88,8 +88,8 @@ class TransactionController extends Controller
                                 'message'   => 'Insufficient Balance',
                             ]);
                         }
-                        DB::table('members')->where('id', $transaction->member_id)
-                        ->decrement('balance', $transaction->amount);
+                        // DB::table('members')->where('id', $transaction->member_id)
+                        // ->decrement('balance', $transaction->amount);
                     }
                 } else if ($request->status == '2') {
                     DB::table('members')->where('id', $transaction->member_id)
